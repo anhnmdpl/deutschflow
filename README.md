@@ -30,3 +30,18 @@ Web app tự học tiếng Đức theo hướng **Grammar First**, giải thích
 4. Ôn tập giãn cách và nhắc học mỗi ngày.
 
 Ứng dụng được viết gọn trong `index.html`; có thể phục vụ trực tiếp từ GitHub Pages mà không cần npm/build.
+
+## Supabase cloud sync (setup required)
+Project: `emrbvdnvobosgcqpdwua`
+
+1. Open [Supabase SQL Editor](https://supabase.com/dashboard/project/emrbvdnvobosgcqpdwua/sql/new), paste and run **[supabase/schema.sql](supabase/schema.sql)**. Review the SQL before running; it creates `public.learning_progress`, enables RLS, revokes anonymous access and grants access only to each user's row.
+2. In [Authentication → URL Configuration](https://supabase.com/dashboard/project/emrbvdnvobosgcqpdwua/auth/url-configuration), set **Site URL** to `https://anhnmdpl.github.io/deutschflow/` and add `https://anhnmdpl.github.io/deutschflow/` to Redirect URLs.
+3. In [Authentication → Providers](https://supabase.com/dashboard/project/emrbvdnvobosgcqpdwua/auth/providers), ensure **Email** login is enabled.
+4. Open the GitHub Pages website, choose **Cài đặt**, enter an email and request a login link. Open the email link, then use **Đồng bộ ngay**.
+5. Sign in with the same email on another device and test a new lesson completion or note. Confirm the update appears after **Đồng bộ ngay** or refreshing the page.
+
+### Sync limitations
+- **The SQL setup and email authentication have not been executed or verified in your Supabase project.** Do not assume multi-device sync is functioning until steps 1–5 pass.
+- While logged out, progress remains local in the browser. While logged in, progress is copied locally and periodically synced to the per-user row.
+- If two devices edit the same exact note simultaneously, later sync can overwrite that field. The MVP does not yet implement revision-based conflict resolution.
+- Supabase publishable key (in `cloud.js`) is safe to expose **only with correctly configured RLS**. Never store database passwords, secret keys or service role keys in GitHub or the browser.
